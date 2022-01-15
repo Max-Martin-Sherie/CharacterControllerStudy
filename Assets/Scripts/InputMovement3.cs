@@ -49,7 +49,7 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("whether or not we use the smooth stepping")]private bool m_smoothStepping = true;
         [SerializeField, HideInInspector, Tooltip("the sensitivity of the step detection")]private float m_stepSensitivity = 100f;
         [SerializeField, HideInInspector, Tooltip("the speed of the of the stepping")]private float m_smoothingSpeed = 10f;
-    
+
         /// <summary> The different states player's acceleration
         /// could be: idle, accelerating, sustaining, decelerating</summary>
         private enum AccelerationState
@@ -508,9 +508,17 @@ namespace Player_Scripts
 
         #region Head Raoul
 
+        /// <summary>
+        /// The function called tu update the head's position using the headbob curve and the time
+        /// </summary>
+        /// <param name="p_magnitude"> the magnitude of the bob </param>
+        /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
         private void UpdateHeadBob(float p_magnitude, GroundTouchingState p_groundTouchingState)
         {
+            // Getting the period of the curve by inverting the speed 
             float invertedSpeed = 1 / m_headBobSpeed;
+            
+            // if teh player isn't grounded : reset the position
             if (p_groundTouchingState != GroundTouchingState.grounded)
             {
                 m_cameraTr.localPosition = Vector3.MoveTowards(m_cameraTr.localPosition, Vector3.up * m_originalCameraHeight, invertedSpeed* Time.deltaTime);
