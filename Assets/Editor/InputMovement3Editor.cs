@@ -48,6 +48,7 @@ namespace EditorTools
             SerializedProperty gravityAcceleration = serializedObject.FindProperty("m_gravityAcceleration");
             SerializedProperty slideAcceleration = serializedObject.FindProperty("m_slideAcceleration");
             SerializedProperty maxSlideSpeed = serializedObject.FindProperty("m_maxSlideSpeed");
+            SerializedProperty minimumSlideDeceleration = serializedObject.FindProperty("m_minimumSlideDeceleration");
             SerializedProperty maxFallSpeed = serializedObject.FindProperty("m_maxFallSpeed");
             SerializedProperty groundCheckRange = serializedObject.FindProperty("m_groundCheckRange");
             SerializedProperty maxSlope = serializedObject.FindProperty("m_maxSlope");
@@ -160,6 +161,7 @@ namespace EditorTools
                 PropertyField(gravityAcceleration);
                 PropertyField(slideAcceleration);
                 PropertyField(maxSlideSpeed);
+                minimumSlideDeceleration.floatValue = Slider("Minimum Slide Deceleration", minimumSlideDeceleration.floatValue,0f,1f);
                 PropertyField(maxFallSpeed);
                 PropertyField(groundCheckRange);
                 PropertyField(maxSlope);

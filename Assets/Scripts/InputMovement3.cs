@@ -29,10 +29,11 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_gravityAcceleration = 16f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player on a slope in m/s²") ]private float m_slideAcceleration = 16f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_maxSlideSpeed = 250f;
+        [SerializeField, HideInInspector, Tooltip("The minimum slide deceleration value") ] private float m_minimumSlideDeceleration = .5f;
         [SerializeField, HideInInspector, Tooltip("The gravitational acceleration of the player in m/s²") ]private float m_maxFallSpeed = 250f;
         [SerializeField, HideInInspector, Tooltip("The distance until which the player will detect the ground")]private float m_groundCheckRange;
         [SerializeField, HideInInspector, Tooltip("The maximum slope inclination that the player can move on without sliding")]private float m_maxSlope;
-        [SerializeField, HideInInspector, Tooltip("The Slide Deceleration")] private float m_slideDeceleration;
+        [SerializeField, HideInInspector, Tooltip("The Slide Deceleration in m/s²")] private float m_slideDeceleration;
     
         [SerializeField, HideInInspector, Tooltip("the height at which the player will jump in m"), Min(0.0f)] private float m_playerJumpHeight = .5f;
         [SerializeField, HideInInspector, Tooltip("the tolerance time of the jump in s"), Min(0.0f)] private float m_playerJumpToleranceTime = .5f;
@@ -57,8 +58,7 @@ namespace Player_Scripts
             idle,
             accelerating,
             sustaining,
-            decelerating,
-            error
+            decelerating
         }
     
         /// <summary> The different of the player's groundedness
@@ -111,6 +111,8 @@ namespace Player_Scripts
         private Coroutine m_jumpCoroutine;
         private bool m_smoothing;
         private float m_targetVelocity;
+        private float m_headBobPreviousTime;
+        private bool m_sprinting;
 
 
         // Start is called before the first frame update
@@ -319,7 +321,7 @@ namespace Player_Scripts
             float speed = Vector3.Angle(p_groundNormal, Vector3.up) / 90f;
         
             // Clamping the minimum acceleration to .5f
-            speed = Mathf.Max(.5f, speed);
+            speed = Mathf.Max(m_minimumSlideDeceleration, speed);
         
             // Setting the new Displacement
             m_slopeDisplacement *= m_slideVelocity * speed;
@@ -365,16 +367,17 @@ namespace Player_Scripts
 
         /// <summary/> Adds te players input to the displacement
         /// <param name="p_displacement"> the displacement to add the player's input too</param>
-        /// <param name="p_groundNormal"></param>
-        private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal)
+        /// <param name="p_groundNormal"> the ground normal of that the player is standing on </param>
+        /// <param name="p_groundTouchingState"> the ground topuching state of the player </param>
+        private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal, GroundTouchingState p_groundTouchingState)
         {
-            bool sprinting = Input.GetKey(m_sprintKey);
+            m_sprinting = Input.GetKey(m_sprintKey) && (p_groundTouchingState == GroundTouchingState.grounded || m_sprinting);
             
             
-            float maxMovementSpeed = sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
+            float maxMovementSpeed = m_sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
             
-            float accelerationTime = sprinting? m_accelerationTimeSprinting : m_accelerationTime;
-            float decelerationTime = sprinting? m_decelerationTimeSprinting : m_decelerationTime;
+            float accelerationTime = m_sprinting? m_accelerationTimeSprinting : m_accelerationTime;
+            float decelerationTime = m_sprinting? m_decelerationTimeSprinting : m_decelerationTime;
             
             //Getting the player input
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
@@ -506,27 +509,34 @@ namespace Player_Scripts
 
         #endregion
 
-        #region Head Raoul
+        #region Head Bob
 
         /// <summary>
         /// The function called tu update the head's position using the headbob curve and the time
         /// </summary>
-        /// <param name="p_magnitude"> the magnitude of the bob </param>
+        /// <param name="p_movementSpeed"> the magnitude of the bob </param>
         /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
-        private void UpdateHeadBob(float p_magnitude, GroundTouchingState p_groundTouchingState)
+        private void UpdateHeadBob(float p_movementSpeed, GroundTouchingState p_groundTouchingState)
         {
             // Getting the period of the curve by inverting the speed 
             float invertedSpeed = 1 / m_headBobSpeed;
             
-            // if teh player isn't grounded : reset the position
-            if (p_groundTouchingState != GroundTouchingState.grounded)
+            // if the player isn't grounded : reset the position
+            if (p_groundTouchingState != GroundTouchingState.grounded || p_movementSpeed == 0f)
             {
+                m_headBobPreviousTime = 0f;
                 m_cameraTr.localPosition = Vector3.MoveTowards(m_cameraTr.localPosition, Vector3.up * m_originalCameraHeight, invertedSpeed* Time.deltaTime);
                 return;
             }
-            float magnitude = Mathf.Min(p_magnitude, m_maxMovementSpeedSprinting);
-            float intensity = m_headBobIntensity * (magnitude / m_maxMovementSpeedSprinting);
-            float time = (Time.time % invertedSpeed)/ invertedSpeed;
+            
+            float speed = Mathf.Min(p_movementSpeed, m_maxMovementSpeedSprinting);
+
+            m_headBobPreviousTime += Time.deltaTime * speed/m_maxMovementSpeedSprinting;
+
+            float intensity = m_headBobIntensity * (speed / m_maxMovementSpeedSprinting);
+            
+            float time = (m_headBobPreviousTime % invertedSpeed)/ invertedSpeed;
+            
             s_headBobCurvePositionX = time;
             m_cameraTr.localPosition =  Vector3.up * (m_originalCameraHeight + m_headBobAnimationCurve.Evaluate(time) * (intensity / 2f));
         }
