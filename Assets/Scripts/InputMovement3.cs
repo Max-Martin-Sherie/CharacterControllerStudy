@@ -380,7 +380,8 @@ namespace Player_Scripts
         }
 
         #endregion
-        
+    
+    
         #region Movement
 
         /// <summary/> Adds te players input to the displacement
@@ -511,7 +512,7 @@ namespace Player_Scripts
                     speed = m_targetVelocity + (curvePositionX * speedToRemove);
                     
                     // Debug.Log($"target: {m_targetVelocity} initial: {m_initialSpeed} time: {time} speed: {speed}");
-                    m_currentInputVelocity = Vector3.ClampMagnitude(m_currentInputVelocity,1f) * speed;
+                    m_currentInputVelocity = m_currentInputVelocity.normalized * speed;
                 
                     break;
             }

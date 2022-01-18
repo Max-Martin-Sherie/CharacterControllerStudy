@@ -125,7 +125,6 @@ MonoBehaviour:
   m_jumpUsingGroundNormal: 0
   m_jumpOnSlope: 1
   m_jumpOnSlopeUsingGroundNormal: 1
-  m_antiClimbSafety: 1
   m_jumpKey: 32
   m_headBob: 1
   m_headBobSpeed: 3
