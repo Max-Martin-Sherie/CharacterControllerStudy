@@ -46050,7 +46050,6 @@ PrefabInstance:
       value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
-<<<<<<< HEAD
       propertyPath: m_headBobSpeed
       value: 3
       objectReference: {fileID: 0}
@@ -46081,14 +46080,6 @@ PrefabInstance:
     - target: {fileID: 6766729481684740878, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
-=======
-      propertyPath: m_antiClimbSafety
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
-      propertyPath: m_jumpOnSlopeUsingGroundNormal
-      value: 1
->>>>>>> parent of e0caeb2 (small var tweeking)
       objectReference: {fileID: 0}
     - target: {fileID: 6766729482139498320, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_Name
