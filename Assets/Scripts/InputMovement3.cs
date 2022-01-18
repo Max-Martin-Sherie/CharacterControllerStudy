@@ -17,10 +17,20 @@ namespace Player_Scripts
     
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTime = .3f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTime = .5f;
-        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprinting = .5f;
+        
+        [SerializeField, HideInInspector, Tooltip("Boolean to check wether or not the player will have a different acceleration and deceleration in mid air")]private bool m_airAcceleration;
+        
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeSprintingAirborn = .5f;
+        [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprintingAirborn = .5f;
+        
         [SerializeField, HideInInspector, Tooltip("The Sprint Key")] private KeyCode m_sprintKey;
-        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_sustainDirectionChangeSpeed = 100f;
+        [SerializeField, HideInInspector, Tooltip("Boolean to check wether or not the player will be able to start sprinting while in mid air")]private bool m_canSprintInMidAir;
+        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_directionChangeSpeed = 100f;
+        [SerializeField, HideInInspector, Tooltip("The Speed of the player's speed transition rotation in °/²"), Min(0f)]private float m_directionChangeSpeedAirborn = 100f;
 
         [SerializeField, HideInInspector, Tooltip("the sensitivity of the mouse"), Range(0f,15f)] private float m_mouseSensitivity = 4f;
     
@@ -39,7 +49,8 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("the tolerance time of the jump in s"), Min(0.0f)] private float m_playerJumpToleranceTime = .5f;
         [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when grounded")]private bool m_jumpUsingGroundNormal;
         [SerializeField, HideInInspector, Tooltip("Will the player jump when on slope")]private bool m_jumpOnSlope= true;
-        [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when on slope")]private bool m_jumpOnSlopeUsingGroundNormal= true;
+        [SerializeField, HideInInspector, Tooltip("Will the player jump using the ground normal when on slope")]private bool m_jumpOnSlopeUsingGroundNormal = true;
+        [SerializeField, HideInInspector, Tooltip("Will the player's jump reset his input velocity")]private bool m_antiClimbSafety = true;
         [SerializeField, HideInInspector, Tooltip("The Jump Key")] private KeyCode m_jumpKey;
 
         [SerializeField, HideInInspector, Tooltip("boolean to switch wether we want the player to have a headBob or not")] private bool m_headBob = true;
@@ -113,6 +124,7 @@ namespace Player_Scripts
         private float m_targetVelocity;
         private float m_headBobPreviousTime;
         private bool m_sprinting;
+        private Vector2 m_inputDirection;
 
 
         // Start is called before the first frame update
@@ -276,6 +288,13 @@ namespace Player_Scripts
             if(p_groundTouchingState == GroundTouchingState.onSlope && m_jump)
             {
                 jumpDir = m_jumpOnSlopeUsingGroundNormal ? p_groundNormal : Vector3.up;
+
+                if (m_jumpOnSlopeUsingGroundNormal && m_antiClimbSafety)
+                {
+                    m_currentInputVelocity = Vector2.zero;
+                    ResetCurveTimer();
+                }
+                
                 m_currentInputVelocity = Vector2.zero; // Resetting the player's input velocity to avoid climbing
                 m_gravity.y = 0f;
                 m_gravity += jumpDir * Mathf.Sqrt(m_playerJumpHeight * 2f * m_gravityAcceleration);
@@ -371,17 +390,34 @@ namespace Player_Scripts
         /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
         private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal, GroundTouchingState p_groundTouchingState)
         {
-            m_sprinting = Input.GetKey(m_sprintKey) && (p_groundTouchingState == GroundTouchingState.grounded || m_sprinting);
+            float accelerationTime;
+            float decelerationTime;
+
+            float directionChangeSpeed;
             
+            if (!m_airAcceleration || p_groundTouchingState == GroundTouchingState.grounded)
+            {
+                directionChangeSpeed = m_directionChangeSpeed;
+                m_sprinting = Input.GetKey(m_sprintKey);
+                accelerationTime = m_sprinting? m_accelerationTimeSprinting : m_accelerationTime;
+                decelerationTime = m_sprinting? m_decelerationTimeSprinting : m_decelerationTime;
+            }
+            else
+            {
+                directionChangeSpeed = m_directionChangeSpeedAirborn;
+                if(m_canSprintInMidAir) m_sprinting = Input.GetKey(m_sprintKey);
+                
+                accelerationTime = m_sprinting? m_accelerationTimeSprintingAirborn : m_accelerationTimeAirborn;
+                decelerationTime = m_sprinting? m_decelerationTimeSprintingAirborn : m_decelerationTimeAirborn;
+            }
             
             float maxMovementSpeed = m_sprinting? m_maxMovementSpeedSprinting : m_maxMovementSpeed;
-            
-            float accelerationTime = m_sprinting? m_accelerationTimeSprinting : m_accelerationTime;
-            float decelerationTime = m_sprinting? m_decelerationTimeSprinting : m_decelerationTime;
-            
+
             //Getting the player input
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
+            m_inputDirection = Vector2.MoveTowards(m_inputDirection,playerInput,directionChangeSpeed * Time.deltaTime);
+            
             // Setting the different states
             // No input and immobile : Idle
             // No input and mobile : decelerating
@@ -395,7 +431,10 @@ namespace Player_Scripts
             if (playerInput == Vector2.zero)
             {
                 if (m_currentInputVelocity == Vector2.zero)
+                {
                     m_movementState = AccelerationState.idle;
+                    //m_inputDirection = Vector2.zero;
+                }
                 else
                 {
                     // Resetting the curve timer
@@ -448,12 +487,12 @@ namespace Player_Scripts
                 
                     // Calculating the speed and adding it to the current input
                     float speed = curvePositionX * (maxMovementSpeed - m_initialSpeed) + m_initialSpeed;
-                    m_currentInputVelocity = playerInput * speed;
+                    m_currentInputVelocity = m_inputDirection * speed;
                 
                     break;
                 case AccelerationState.sustaining:
                     // Linear transition between directions when going at full speed
-                    m_currentInputVelocity = Vector3.RotateTowards(m_currentInputVelocity,playerInput,m_sustainDirectionChangeSpeed * Time.deltaTime, 0f);
+                    m_currentInputVelocity = m_inputDirection * maxMovementSpeed;
                     break;
                 case AccelerationState.decelerating:
 
@@ -495,7 +534,7 @@ namespace Player_Scripts
 #if UNITY_EDITOR
             s_speed = m_currentInputVelocity.magnitude;
 
-            s_inputAngle = Vector2.SignedAngle(playerInput, Vector2.up);
+            s_inputAngle = Vector2.SignedAngle(m_inputDirection, Vector2.up);
             s_inputVelocityAngle = Vector2.SignedAngle(m_currentInputVelocity, Vector2.up);
 #endif
         }

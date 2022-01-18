@@ -27,12 +27,20 @@ namespace EditorTools
             SerializedProperty movementSpeed = serializedObject.FindProperty("m_maxMovementSpeed");
             SerializedProperty accelerationTime = serializedObject.FindProperty("m_accelerationTime");
             SerializedProperty decelerationTime = serializedObject.FindProperty("m_decelerationTime");
-            SerializedProperty sustainDirectionChangeSpeed = serializedObject.FindProperty("m_sustainDirectionChangeSpeed");
-            
-            
+            SerializedProperty directionChangeSpeed = serializedObject.FindProperty("m_directionChangeSpeed");
+            SerializedProperty directionChangeSpeedAirborn = serializedObject.FindProperty("m_directionChangeSpeedAirborn");
+
             SerializedProperty maxMovementSpeedSprinting = serializedObject.FindProperty("m_maxMovementSpeedSprinting");
             SerializedProperty accelerationTimeSprinting = serializedObject.FindProperty("m_accelerationTimeSprinting");
             SerializedProperty decelerationTimeSprinting = serializedObject.FindProperty("m_decelerationTimeSprinting");
+            
+            
+            SerializedProperty airAcceleration = serializedObject.FindProperty("m_airAcceleration");
+            SerializedProperty accelerationTimeAirborn = serializedObject.FindProperty("m_accelerationTimeAirborn");
+            SerializedProperty decelerationTimeAirborn = serializedObject.FindProperty("m_decelerationTimeAirborn");
+            SerializedProperty accelerationTimeSprintingAirborn = serializedObject.FindProperty("m_accelerationTimeSprintingAirborn");
+            SerializedProperty decelerationTimeSprintingAirborn = serializedObject.FindProperty("m_decelerationTimeSprintingAirborn");
+            
             SerializedProperty sprintKey = serializedObject.FindProperty("m_sprintKey");
 
             // Acceleration Curves
@@ -60,6 +68,7 @@ namespace EditorTools
             SerializedProperty jumpUsingGroundNormal = serializedObject.FindProperty("m_jumpUsingGroundNormal");
             SerializedProperty jumpOnSlope = serializedObject.FindProperty("m_jumpOnSlope");
             SerializedProperty jumpOnSlopeUsingGroundNormal = serializedObject.FindProperty("m_jumpOnSlopeUsingGroundNormal");
+            SerializedProperty antiClimbSafety = serializedObject.FindProperty("m_antiClimbSafety");
             SerializedProperty jumpKey = serializedObject.FindProperty("m_jumpKey");
         
             //Head Bob
@@ -103,7 +112,21 @@ namespace EditorTools
                 PropertyField(accelerationTimeSprinting);
                 PropertyField(decelerationTimeSprinting);
                 Space();
-                PropertyField(sustainDirectionChangeSpeed);
+                PropertyField(airAcceleration);
+                
+                if (airAcceleration.boolValue)
+                {
+                    Space();
+                    PropertyField(accelerationTimeAirborn);
+                    PropertyField(decelerationTimeAirborn);
+                    Space();
+                    PropertyField(accelerationTimeSprintingAirborn);
+                    PropertyField(decelerationTimeSprintingAirborn);
+                }
+                
+                Space();
+                PropertyField(directionChangeSpeed);
+                PropertyField(directionChangeSpeedAirborn);
                 Space();
                 PropertyField(sprintKey);
             }
@@ -179,7 +202,12 @@ namespace EditorTools
                 PropertyField(playerJumpToleranceTime);
                 PropertyField(jumpUsingGroundNormal);
                 PropertyField(jumpOnSlope);
-                if(jumpOnSlope.boolValue) PropertyField(jumpOnSlopeUsingGroundNormal);
+                if(jumpOnSlope.boolValue)
+                {
+                    PropertyField(jumpOnSlopeUsingGroundNormal);
+                    
+                    if (jumpOnSlopeUsingGroundNormal.boolValue) PropertyField(antiClimbSafety);
+                }
             }
         
             // Head Bob
