@@ -150,7 +150,7 @@ namespace Player_Scripts
             UpdateJump(groundTouchingState, groundNormal);
             UpdateSlide(ref displacement, groundTouchingState,groundNormal);
             UpdateGravity(ref displacement, groundTouchingState);
-            UpdatePlayerInput(ref displacement, groundNormal, groundTouchingState);
+            UpdatePlayerInput(ref displacement, groundNormal);
         
             // The way the stepping works is that I compare the movement the player would've done with a simple
             // transform.Translate to the one done by the Character controller.Move (Only on the y).
@@ -368,7 +368,7 @@ namespace Player_Scripts
         /// <summary/> Adds te players input to the displacement
         /// <param name="p_displacement"> the displacement to add the player's input too</param>
         /// <param name="p_groundNormal"> the ground normal of that the player is standing on </param>
-        /// <param name="p_groundTouchingState"> the ground touching state of the player </param>
+        /// <param name="p_groundTouchingState"> the ground topuching state of the player </param>
         private void UpdatePlayerInput(ref Vector3 p_displacement, Vector3 p_groundNormal, GroundTouchingState p_groundTouchingState)
         {
             m_sprinting = Input.GetKey(m_sprintKey) && (p_groundTouchingState == GroundTouchingState.grounded || m_sprinting);
