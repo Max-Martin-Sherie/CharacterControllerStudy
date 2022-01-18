@@ -108,10 +108,11 @@ MonoBehaviour:
   m_gravityAcceleration: 30
   m_slideAcceleration: 50
   m_maxSlideSpeed: 250
+  m_minimumSlideDeceleration: 0.25
   m_maxFallSpeed: 250
   m_groundCheckRange: 0.4
   m_maxSlope: 39
-  m_slideDeceleration: 50
+  m_slideDeceleration: 70
   m_playerJumpHeight: 1.5
   m_playerJumpToleranceTime: 0.1
   m_jumpUsingGroundNormal: 0
@@ -119,8 +120,8 @@ MonoBehaviour:
   m_jumpOnSlopeUsingGroundNormal: 1
   m_jumpKey: 32
   m_headBob: 1
-  m_headBobSpeed: 2
-  m_headBobIntensity: 0.4
+  m_headBobSpeed: 3
+  m_headBobIntensity: 0.3
   m_headBobAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -165,7 +166,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_smoothStepping: 1
   m_stepSensitivity: 1000
-  m_smoothingSpeed: 5
+  m_smoothingSpeed: 9
   m_lockCursor: 1
   s_speed: 0
   s_curvePositionX: 0
@@ -190,7 +191,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.35
   m_SlopeLimit: 45
-  m_StepOffset: 1
+  m_StepOffset: 0.75
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
