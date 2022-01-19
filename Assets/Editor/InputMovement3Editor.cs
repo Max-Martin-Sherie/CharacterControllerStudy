@@ -36,6 +36,8 @@ namespace EditorTools
             
             
             SerializedProperty airAcceleration = serializedObject.FindProperty("m_airAcceleration");
+            SerializedProperty useGroundDetected = serializedObject.FindProperty("m_useGroundDetected");
+            
             SerializedProperty accelerationTimeAirborn = serializedObject.FindProperty("m_accelerationTimeAirborn");
             SerializedProperty decelerationTimeAirborn = serializedObject.FindProperty("m_decelerationTimeAirborn");
             SerializedProperty accelerationTimeSprintingAirborn = serializedObject.FindProperty("m_accelerationTimeSprintingAirborn");
@@ -116,6 +118,7 @@ namespace EditorTools
                 
                 if (airAcceleration.boolValue)
                 {
+                    PropertyField(useGroundDetected);
                     Space();
                     PropertyField(accelerationTimeAirborn);
                     PropertyField(decelerationTimeAirborn);

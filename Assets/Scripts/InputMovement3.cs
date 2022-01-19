@@ -20,7 +20,8 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeSprinting = .5f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeSprinting = .5f;
         
-        [SerializeField, HideInInspector, Tooltip("Boolean to check wether or not the player will have a different acceleration and deceleration in mid air")]private bool m_airAcceleration;
+        [SerializeField, HideInInspector, Tooltip("Boolean to check whether or not the player will have a different acceleration and deceleration in mid air")]private bool m_airAcceleration;
+        [SerializeField, HideInInspector, Tooltip("Boolean to check whether or not the player will still use his ground acceleration if th ground is detected")]private bool m_useGroundDetected;
         
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to accelerate to full speed"), Min(0f)]private float m_accelerationTimeAirborn = .5f;
         [SerializeField, HideInInspector, Tooltip("The Time it will take the player to decelerate to an idle speed"), Min(0f)]private float m_decelerationTimeAirborn = .5f;
@@ -394,7 +395,7 @@ namespace Player_Scripts
 
             float directionChangeSpeed;
             
-            if (!m_airAcceleration || p_groundTouchingState == GroundTouchingState.grounded)
+            if (!m_airAcceleration || p_groundTouchingState == GroundTouchingState.grounded || (m_useGroundDetected && p_groundTouchingState == GroundTouchingState.groundDetected))
             {
                 directionChangeSpeed = m_directionChangeSpeed;
                 m_sprinting = Input.GetKey(m_sprintKey);
@@ -416,17 +417,17 @@ namespace Player_Scripts
             Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
             m_inputDirection = Vector2.MoveTowards(m_inputDirection,playerInput,directionChangeSpeed * Time.deltaTime);
-            
             // Setting the different states
             // No input and immobile : Idle
             // No input and mobile : decelerating
             // Yes input and yes at max running speed : sustaining
             // Yes input and max running speed is inferior : decelerating
             // Yes input and no at max running speed : accelerating
-            //
+            
             // decelerating & accelerating are temporary states.
             // That means that they are transition states between Idle and Sustain. The are transitioned between by user defined curves called  m_accelerationBehaviorCurve & m_decelerationBehaviorCurve
             // (ง ͠° ͟ل͜ ͡°)ง
+            
             if (playerInput == Vector2.zero)
             {
                 if (m_currentInputVelocity == Vector2.zero)
@@ -491,7 +492,7 @@ namespace Player_Scripts
                     break;
                 case AccelerationState.sustaining:
                     // Linear transition between directions when going at full speed
-                    m_currentInputVelocity = m_inputDirection * maxMovementSpeed;
+                    m_currentInputVelocity = m_inputDirection.normalized * maxMovementSpeed;
                     break;
                 case AccelerationState.decelerating:
 
