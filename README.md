@@ -7,7 +7,7 @@
   
 #### This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air).  
   
-![Input Metrics](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputMetrics.png?raw=true)
+![Input Metrics](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputMetrics.png?raw=false)
   
   
 #### These vallues follow user defined curves.  
