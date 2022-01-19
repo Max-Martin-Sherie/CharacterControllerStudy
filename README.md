@@ -8,7 +8,7 @@ This Character controller has costumizable acceleration time for every state (wa
   
 Gravity, slide acceleration, and drag are all defined independently by the user independently from the engine's physics system.  
   
-
+All the movement data is visible in real-time in the info tab.
   
 # Roadmap
 
