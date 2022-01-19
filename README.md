@@ -13,7 +13,7 @@
 #### These vallues follow user defined curves.  
   
 ![Curves](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputCurves.png?raw=true) 
-![Curve editor](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/CurvesEditor.png?raw=true)
+![Curve editor](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/CurvesEditor.png?raw=false)
   
   
 #### Gravity, slide acceleration, and drag are all defined by the user independently from the engine's physics system.  
