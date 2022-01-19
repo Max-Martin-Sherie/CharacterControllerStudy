@@ -15,7 +15,7 @@ Gravity, slide acceleration, and drag are all defined by the user independently 
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gym.png?raw=true)
 
 All the movement data is visible in real-time in the info tab.
-![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Info.png?raw=true)
+![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gravity&Slopes.png?raw=true)
 
 # Roadmap
 
