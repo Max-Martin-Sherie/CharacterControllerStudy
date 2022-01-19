@@ -7,7 +7,7 @@ A study of a barebones higly customizable first person character controller for 
 This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air).  
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputMetrics.png?raw=true)
   
-These vallues follow user defined curves
+These vallues follow user defined curves.  
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputCurves.png?raw=true)
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/CurvesEditor.png?raw=true)
 
