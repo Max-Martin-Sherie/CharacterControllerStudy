@@ -11,7 +11,7 @@ These vallues follow user defined curves.
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputCurves.png?raw=true)
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/CurvesEditor.png?raw=true)
 
-Gravity, slide acceleration, and drag are all defined independently by the user independently from the engine's physics system.  
+Gravity, slide acceleration, and drag are all defined by the user independently from the engine's physics system.  
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gym.png?raw=true)
 
 All the movement data is visible in real-time in the info tab.
