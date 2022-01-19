@@ -6,6 +6,8 @@ A study of a barebones higly customizable first person character controller for 
   
 This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air) that all follow user defined acceleration and deceleration curves.  
   
+Gravity, slide acceleration, and drag are all defined independently by the user independently from the engine's physics system.  
+  
 
   
 # Roadmap
