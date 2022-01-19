@@ -5,22 +5,26 @@
 ![Gym Bird Eye View](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gym.png?raw=true)
   
   <br/>
+
 #### This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air).  
   
 ![Input Metrics](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputMetrics.png?raw=false)
   
   <br/>
+
 #### These vallues follow user defined curves.  
   
 ![Curves](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputCurves.png?raw=true) 
 ![Curve editor](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/CurvesEditor.png?raw=false)
   
   <br/>
+
 #### Gravity, slide acceleration, and drag are all defined by the user independently from the engine's physics system.  
   
 ![Gravity & Slide metrics](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gravity&Slopes.png?raw=true)
   
   <br/>
+
 #### All the movement data is visible in real-time in the info tab.  
   
 ![Controller Info](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Info.png?raw=true)
