@@ -1,8 +1,13 @@
 # Max-Martin Sherie's Character Controller Study
-
+  
 A study of a barebones higly customizable first person character controller for Unity 2020.3 based on the built in character controller component.
 ![alt text](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gym.png?raw=true)
+  
+  
+This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air) that all follow user defined acceleration and deceleration curves.  
+  
 
+  
 # Roadmap
 
 ✅ Input detection  
