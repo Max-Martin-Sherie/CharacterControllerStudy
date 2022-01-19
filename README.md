@@ -4,7 +4,7 @@
   
 ![Gym Bird Eye View](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/Gym.png?raw=true)
   
-  
+  <br/>
 #### This Character controller has costumizable acceleration time for every state (walking, sprinting, mid-air).  
   
 ![Input Metrics](https://github.com/Max-Martin-Sherie/CharacterControllerStudy/blob/main/Images/InputMetrics.png?raw=false)
