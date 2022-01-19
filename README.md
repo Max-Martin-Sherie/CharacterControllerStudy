@@ -6,3 +6,15 @@ A study of a barebones higly customizable first person character controller for 
 # Roadmap
 
 ✅ Input detection
+✅ Simple movement
+✅ State based acceleration
+✅ Acceleration and deceleration Curves
+✅ Jump & Gravity
+✅ Slope & Slide handling
+✅ Sprint
+✅ Air control
+❌ Counter strafing
+❌ Crouch
+❌ Third person camera
+❌ Camera transitions
+❌ Third person animation
