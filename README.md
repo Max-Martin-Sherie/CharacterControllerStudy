@@ -41,7 +41,7 @@
 ✅ Slope & Slide handling  
 ✅ Sprint  
 ✅ Air control  
-✅ Edge Safety
+✅ Edge Safety  
 ❌ Counter strafing  
 ❌ Crouch  
 ❌ Third person camera  
