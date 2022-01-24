@@ -42,6 +42,7 @@
 ✅ Sprint  
 ✅ Air control  
 ✅ Edge Safety  
+❌ Jump Tolerance  
 ❌ Counter strafing  
 ❌ Crouch  
 ❌ Third person camera  
