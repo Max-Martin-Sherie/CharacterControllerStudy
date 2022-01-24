@@ -5,6 +5,10 @@ namespace Player_Scripts
 {
     public class InputMovement3 : MonoBehaviour
     {
+        [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
+        [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
+        [SerializeField, HideInInspector] private bool m_edgeSafety = true;
+
         [SerializeField, HideInInspector, Tooltip("the player's character controller")]private CharacterController m_controller;
         [SerializeField, HideInInspector, Tooltip("The camera transform (not the parent)")] private Transform m_cameraTr;
         [SerializeField, HideInInspector, Tooltip("The camera parent transform")] private Transform m_cameraParentTr;
@@ -526,7 +530,17 @@ namespace Player_Scripts
             inputDisplacement = Vector3.ProjectOnPlane(inputDisplacement, p_groundNormal);
             m_gravity.x = gravityHorizontal.x;
             m_gravity.z = gravityHorizontal.z;
-        
+            
+            // Edge security
+            if (m_edgeSafety && m_movementState == AccelerationState.decelerating && p_groundTouchingState == GroundTouchingState.grounded && inputDisplacement.magnitude <= m_minSpeedFactor * maxMovementSpeed)
+            {
+                if (!Physics.Raycast(Vector3.up + transform.position + inputDisplacement * Time.deltaTime, Vector3.down, m_edgeAutoStopCheckDistance + 1f))
+                {
+                    inputDisplacement = Vector3.zero;
+                    m_currentInputVelocity = Vector2.zero;
+                }
+            }
+            
             // diplacement groig dfs<fksdgf
             p_displacement += inputDisplacement;
 

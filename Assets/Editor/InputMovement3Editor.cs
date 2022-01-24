@@ -15,6 +15,7 @@ namespace EditorTools
         private bool m_showLookMetrics;
         private bool m_showGravitySlope;
         private bool m_showJump;
+        private bool m_edgeSafety;
         private bool m_showHeadBob;
         private bool m_showSmoothStepping;
         private bool m_showInfo;
@@ -33,8 +34,7 @@ namespace EditorTools
             SerializedProperty maxMovementSpeedSprinting = serializedObject.FindProperty("m_maxMovementSpeedSprinting");
             SerializedProperty accelerationTimeSprinting = serializedObject.FindProperty("m_accelerationTimeSprinting");
             SerializedProperty decelerationTimeSprinting = serializedObject.FindProperty("m_decelerationTimeSprinting");
-            
-            
+
             SerializedProperty airAcceleration = serializedObject.FindProperty("m_airAcceleration");
             SerializedProperty accelerationTimeAirborn = serializedObject.FindProperty("m_accelerationTimeAirborn");
             SerializedProperty decelerationTimeAirborn = serializedObject.FindProperty("m_decelerationTimeAirborn");
@@ -70,6 +70,11 @@ namespace EditorTools
             SerializedProperty jumpOnSlopeUsingGroundNormal = serializedObject.FindProperty("m_jumpOnSlopeUsingGroundNormal");
             SerializedProperty antiClimbSafety = serializedObject.FindProperty("m_antiClimbSafety");
             SerializedProperty jumpKey = serializedObject.FindProperty("m_jumpKey");
+            
+            //Edge safety
+            SerializedProperty edgeAutoStopCheckDistance = serializedObject.FindProperty("m_edgeAutoStopCheckDistance");
+            SerializedProperty minSpeedFactor = serializedObject.FindProperty("m_minSpeedFactor");
+            SerializedProperty edgeSafety = serializedObject.FindProperty("m_edgeSafety");
         
             //Head Bob
             SerializedProperty headBob = serializedObject.FindProperty("m_headBob");
@@ -207,6 +212,17 @@ namespace EditorTools
                     PropertyField(jumpOnSlopeUsingGroundNormal);
                     
                     if (jumpOnSlopeUsingGroundNormal.boolValue) PropertyField(antiClimbSafety);
+                }
+            }
+
+            m_edgeSafety = Foldout(m_edgeSafety, "Edge Safety", true, EditorStyles.foldoutHeader);
+            if(m_edgeSafety)
+            {
+                PropertyField(edgeSafety);
+                if(edgeSafety.boolValue)
+                {
+                    PropertyField(edgeAutoStopCheckDistance);
+                    PropertyField(minSpeedFactor);
                 }
             }
         
