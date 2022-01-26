@@ -46046,20 +46046,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
-      propertyPath: m_jumpOnSlope
-      value: 1
+      propertyPath: m_airAcceleration
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
-      propertyPath: m_antiClimbSafety
-      value: 1
+      propertyPath: m_decelerationTime
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_accelerationTimeSprinting
-      value: 0.6
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
-      propertyPath: m_jumpOnSlopeUsingGroundNormal
-      value: 1
+      propertyPath: m_decelerationTimeSprinting
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 6766729482139498320, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_Name

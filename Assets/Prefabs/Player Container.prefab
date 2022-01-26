@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91b4fcd0cde26a458d0ebfe5cec3bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_edgeAutoStopCheckDistance: 0.25
+  m_minSpeedFactor: 0.5
+  m_edgeSafety: 1
   m_controller: {fileID: 6766729481684740876}
   m_cameraTr: {fileID: 6766729482695574457}
   m_cameraParentTr: {fileID: 6766729481713316464}
