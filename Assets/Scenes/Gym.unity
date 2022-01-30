@@ -46054,6 +46054,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_headBobSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: s_curvePositionX
       value: 0.0006968975
       objectReference: {fileID: 0}
@@ -46064,6 +46068,22 @@ PrefabInstance:
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_decelerationTime
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_headBobIntensity
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_maxMovementSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_mouseSensitivity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_playerJumpHeight
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 6766729481684740877, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: s_inputVelocityAngle
@@ -46155,6 +46175,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6766729482139498321, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766729482695574457, guid: efc1c98671f09bb4a95747268e8857ae, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

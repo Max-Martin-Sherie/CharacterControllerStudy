@@ -527,7 +527,7 @@ namespace Player_Scripts
             // Buffering the horizontal push of the gravity based on the player's input
             Vector3 gravityHorizontal = new Vector3(m_gravity.x,0f, m_gravity.z);
             gravityHorizontal = Vector3.ClampMagnitude(gravityHorizontal, (gravityHorizontal + inputDisplacement * Time.deltaTime).magnitude );
-            inputDisplacement = Vector3.ProjectOnPlane(inputDisplacement, p_groundNormal);
+            inputDisplacement = Vector3.ProjectOnPlane(inputDisplacement, p_groundNormal).normalized * inputDisplacement.magnitude;
             m_gravity.x = gravityHorizontal.x;
             m_gravity.z = gravityHorizontal.z;
             
