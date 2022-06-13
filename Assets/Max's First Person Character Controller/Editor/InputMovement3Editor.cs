@@ -50,6 +50,7 @@ namespace EditorTools
         
             // Look Metrics
             SerializedProperty mouseSensitivity = serializedObject.FindProperty("m_mouseSensitivity");
+            SerializedProperty mouseSmoothTime = serializedObject.FindProperty("m_mouseSmoothTime");
             SerializedProperty lockCursor = serializedObject.FindProperty("m_lockCursor");
         
             //Gravity & Slopes
@@ -65,6 +66,7 @@ namespace EditorTools
             //Jump
             SerializedProperty playerJumpHeight = serializedObject.FindProperty("m_playerJumpHeight");
             SerializedProperty playerJumpToleranceTime = serializedObject.FindProperty("m_playerJumpToleranceTime");
+            SerializedProperty coyoteTime = serializedObject.FindProperty("m_coyoteTime");
             SerializedProperty jumpUsingGroundNormal = serializedObject.FindProperty("m_jumpUsingGroundNormal");
             SerializedProperty jumpOnSlope = serializedObject.FindProperty("m_jumpOnSlope");
             SerializedProperty jumpOnSlopeUsingGroundNormal = serializedObject.FindProperty("m_jumpOnSlopeUsingGroundNormal");
@@ -179,6 +181,7 @@ namespace EditorTools
             if (m_showLookMetrics)
             {
                 PropertyField(mouseSensitivity);
+                PropertyField(mouseSmoothTime);
                 PropertyField(lockCursor);
             }
         
@@ -205,6 +208,7 @@ namespace EditorTools
                 Space();
                 PropertyField(playerJumpHeight);
                 PropertyField(playerJumpToleranceTime);
+                PropertyField(coyoteTime);
                 PropertyField(jumpUsingGroundNormal);
                 PropertyField(jumpOnSlope);
                 if(jumpOnSlope.boolValue)

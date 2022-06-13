@@ -8,6 +8,9 @@ namespace Player_Scripts
         [SerializeField, HideInInspector, Min(0f)] private float m_edgeAutoStopCheckDistance = .25f;
         [SerializeField, HideInInspector, Range(0f,1f)] private float m_minSpeedFactor=.5f;
         [SerializeField, HideInInspector] private bool m_edgeSafety = true;
+        
+        [SerializeField, HideInInspector, Range(0f,1f)] private float m_coyoteTime=.5f;
+        [SerializeField, HideInInspector, Range(0f,.2f)] private float m_mouseSmoothTime=.03f;
 
         [SerializeField, HideInInspector, Tooltip("the player's character controller")]private CharacterController m_controller;
         [SerializeField, HideInInspector, Tooltip("The camera transform (not the parent)")] private Transform m_cameraTr;
@@ -129,6 +132,8 @@ namespace Player_Scripts
         private float m_headBobPreviousTime;
         private bool m_sprinting;
         private Vector2 m_inputDirection;
+        private Vector2 m_currentMouseDelta = Vector2.zero;
+        private Vector2 m_currentMouseDeltaVelocity = Vector2.zero;
 
 
         // Start is called before the first frame update
@@ -245,7 +250,18 @@ namespace Player_Scripts
             yield return new WaitForSeconds(m_playerJumpToleranceTime);
             m_jump = false;
         }
-    
+
+        private bool m_canJump;
+        private Coroutine m_coyoteTimeCoroutine;
+        private GroundTouchingState m_groundTouchingStateSave;
+        
+        private IEnumerator CoyoteTime()
+        {
+            m_canJump = true;
+            yield return new WaitForSeconds(m_coyoteTime);
+            m_canJump = false;
+        }
+        
         /// <summary/> updates the player's jump based on whether or not he is grounded and pressing the right key
         /// <param name="p_groundTouchingState"> Whether the player is grounded or whatever  </param>
         /// <param name="p_groundNormal"> The ground Normal </param>
@@ -270,26 +286,34 @@ namespace Player_Scripts
             }
         
             // Checking whether or not the player is in a situation in which he can jump
-            bool canJump = p_groundTouchingState == GroundTouchingState.grounded || (m_jumpOnSlope && p_groundTouchingState == GroundTouchingState.onSlope);
-        
+            if (p_groundTouchingState == GroundTouchingState.grounded || (m_jumpOnSlope && p_groundTouchingState == GroundTouchingState.onSlope))
+            {
+                if(m_coyoteTimeCoroutine != null)StopCoroutine(m_coyoteTimeCoroutine);
+                m_coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
+                m_groundTouchingStateSave = p_groundTouchingState;
+            }
+
             // Returning if the player can't jump
-            if(!canJump) return;
+            if(!m_canJump) return;
 
             Vector3 jumpDir;
         
             // Jumping with the grounded conditions if the player is grounded
-            if(p_groundTouchingState == GroundTouchingState.grounded && m_jump)
+            if(m_groundTouchingStateSave == GroundTouchingState.grounded && m_jump)
             {
                 jumpDir = m_jumpUsingGroundNormal ? p_groundNormal : Vector3.up;
                 m_gravity.y = 0f;
                 m_gravity += jumpDir * Mathf.Sqrt(m_playerJumpHeight * 2f * m_gravityAcceleration);
                 m_jump = false;
                 StopCoroutine(m_jumpCoroutine);
+
+                m_canJump = false;
+                if(m_coyoteTimeCoroutine != null)StopCoroutine(m_coyoteTimeCoroutine);
                 return;
             }
 
             // Jumping with the On slope condition if the player is on slope
-            if(p_groundTouchingState == GroundTouchingState.onSlope && m_jump)
+            if(m_groundTouchingStateSave == GroundTouchingState.onSlope && m_jump)
             {
                 jumpDir = m_jumpOnSlopeUsingGroundNormal ? p_groundNormal : Vector3.up;
 
@@ -304,9 +328,13 @@ namespace Player_Scripts
                 m_gravity += jumpDir * Mathf.Sqrt(m_playerJumpHeight * 2f * m_gravityAcceleration);
                 m_jump = false;
                 StopCoroutine(m_jumpCoroutine);
+
+                m_canJump = false;
+                if(m_coyoteTimeCoroutine != null)StopCoroutine(m_coyoteTimeCoroutine);
             }
         }
-    
+
+
         /// <summary>
         /// Updates the player's slide
         /// </summary>
@@ -602,10 +630,12 @@ namespace Player_Scripts
         void UpdateMouseLook()
         {
             // Fetching the player's input
-            Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        
+            Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            m_currentMouseDelta = Vector2.SmoothDamp(m_currentMouseDelta, targetMouseDelta, ref m_currentMouseDeltaVelocity, m_mouseSmoothTime);
+            
             // Calculating the camera's pitch
-            m_cameraPitch -= mouseDelta.y * m_mouseSensitivity;
+            m_cameraPitch -= m_currentMouseDelta.y * m_mouseSensitivity;
         
             //Clamping the pitch to avoid barrel rolls (._.)(.-.)(._.)
             m_cameraPitch = Mathf.Clamp(m_cameraPitch, -90.0f, 90.0f);
@@ -614,7 +644,7 @@ namespace Player_Scripts
             m_cameraTr.localEulerAngles = Vector3.right * m_cameraPitch;
 
             //Calculating the camera's yaw
-            Vector3 cameraYaw = Vector3.up * (mouseDelta.x * m_mouseSensitivity);
+            Vector3 cameraYaw = Vector3.up * (m_currentMouseDelta.x * m_mouseSensitivity);
         
             //Setting the camera and the player's new yaw
             m_cameraParentTr.Rotate(cameraYaw);
